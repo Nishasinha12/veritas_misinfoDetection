@@ -21,6 +21,25 @@ CORS(app)
 # ─────────────────────────────────────────────
 # Load LSTM Model
 # ─────────────────────────────────────────────
+
+def download_models():
+    os.makedirs("models", exist_ok=True)
+    
+    model_path = os.path.join("models", "deepaudio.h5")
+    
+    if not os.path.exists(model_path):
+        print("⬇️ Downloading deepaudio.h5 from Google Drive...")
+        gdown.download(
+            "https://drive.google.com/uc?id=1JRIS6rygNFcK65sayP0DjHgVq95gLkCb",
+            model_path,  # ✅ lowercase, matches the variable above
+            quiet=False
+        )
+        print("✅ Model downloaded successfully")
+    else:
+        print("✅ Model already exists locally")
+
+download_models()
+
 MODEL_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models")
 MODEL_PATH = os.path.join(MODEL_DIR, "deepaudio.h5")
 
@@ -147,23 +166,6 @@ def predict_audio():
         traceback.print_exc()
         return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
-def download_models():
-    os.makedirs("models", exist_ok=True)
-    
-    model_path = os.path.join("models", "deepaudio.h5")
-    
-    if not os.path.exists(model_path):
-        print("⬇️ Downloading deepaudio.h5 from Google Drive...")
-        gdown.download(
-            "https://drive.google.com/uc?id=1JRIS6rygNFcK65sayP0DjHgVq95gLkCb",
-            model_path,  # ✅ lowercase, matches the variable above
-            quiet=False
-        )
-        print("✅ Model downloaded successfully")
-    else:
-        print("✅ Model already exists locally")
-
-download_models()
 # ─────────────────────────────────────────────
 # Entry Point
 # ─────────────────────────────────────────────
