@@ -154,11 +154,9 @@ def download_models():
     
     if not os.path.exists(model_path):
         print("⬇️ Downloading deepaudio.h5 from Google Drive...")
-        # Get this ID from your Drive folder
-        file_id = "1twD_BGouhYwTnWi2qzT5doeadosy3b0N"  # ← folder ID, need FILE id
         gdown.download(
-            f"https://drive.google.com/uc?id={file_id}",
-            model_path,
+            "https://drive.google.com/uc?id=1JRIS6rygNFcK65sayP0DjHgVq95gLkCb",
+            model_path,  # ✅ lowercase, matches the variable above
             quiet=False
         )
         print("✅ Model downloaded successfully")
