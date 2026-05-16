@@ -1,0 +1,9 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env
+# Any audio specific files you don't want to track
+*.mp3
+*.wav
+*.h5

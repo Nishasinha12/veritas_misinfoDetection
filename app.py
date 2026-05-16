@@ -4,6 +4,7 @@
 
 import os
 import sys
+import gdown
 import traceback
 import numpy as np
 import librosa
@@ -146,7 +147,25 @@ def predict_audio():
         traceback.print_exc()
         return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
+def download_models():
+    os.makedirs("models", exist_ok=True)
+    
+    model_path = os.path.join("models", "deepaudio.h5")
+    
+    if not os.path.exists(model_path):
+        print("⬇️ Downloading deepaudio.h5 from Google Drive...")
+        # Get this ID from your Drive folder
+        file_id = "1twD_BGouhYwTnWi2qzT5doeadosy3b0N"  # ← folder ID, need FILE id
+        gdown.download(
+            f"https://drive.google.com/uc?id={file_id}",
+            model_path,
+            quiet=False
+        )
+        print("✅ Model downloaded successfully")
+    else:
+        print("✅ Model already exists locally")
 
+download_models()
 # ─────────────────────────────────────────────
 # Entry Point
 # ─────────────────────────────────────────────
