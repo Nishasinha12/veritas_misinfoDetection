@@ -4,7 +4,6 @@
 
 import os
 import sys
-import gdown
 import traceback
 import numpy as np
 import librosa
@@ -21,22 +20,23 @@ CORS(app)
 # ─────────────────────────────────────────────
 # Load LSTM Model
 # ─────────────────────────────────────────────
+from huggingface_hub import hf_hub_download
 
 def download_models():
     os.makedirs("models", exist_ok=True)
-    
     model_path = os.path.join("models", "deepaudio.h5")
     
     if not os.path.exists(model_path):
-        print("⬇️ Downloading deepaudio.h5 from Google Drive...")
-        gdown.download(
-            "https://drive.google.com/uc?id=1JRIS6rygNFcK65sayP0DjHgVq95gLkCb",
-            model_path,  # ✅ lowercase, matches the variable above
-            quiet=False
+        print("⬇️ Downloading from HuggingFace...")
+        hf_hub_download(
+            repo_id="nishuu12/veritas-models",  # ← your HF username
+            filename="deepaudio.h5",
+            local_dir="models",
+            token=os.getenv("HF_TOKEN")
         )
-        print("✅ Model downloaded successfully")
+        print("✅ Downloaded!")
     else:
-        print("✅ Model already exists locally")
+        print("✅ Model already exists")
 
 download_models()
 
