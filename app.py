@@ -153,6 +153,6 @@ def predict_audio():
         return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))  # Smooth Cloud Run port bindings
+    port = int(os.environ.get("PORT", 5001))  # Smooth Cloud Run port bindings
     print(f"📢 Starting Veritas Audio service on 0.0.0.0:{port}...")
     app.run(host="0.0.0.0", port=port)
