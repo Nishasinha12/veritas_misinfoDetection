@@ -43,16 +43,21 @@ download_models()
 MODEL_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models")
 MODEL_PATH = os.path.join(MODEL_DIR, "deepaudio.h5")
 
-print(f"🚀 Attempting to load audio model from: {MODEL_PATH}")
+print(f"🚀 TensorFlow setup initialized.")
 
-try:
-    import tensorflow as tf
-    model = tf.keras.models.load_model(MODEL_PATH, compile=False)
-    print("✅ Audio LSTM model loaded successfully.")
-except Exception as e:
-    print(f"❌ FATAL ERROR: Could not load audio model.")
-    print(f"Error details: {e}")
-    sys.exit(1)
+import tensorflow as tf
+
+model = None
+
+def get_model():
+    global model
+
+    if model is None:
+        print("📦 Loading TensorFlow model...")
+        model = tf.keras.models.load_model(MODEL_PATH, compile=False)
+        print("✅ Audio LSTM model loaded successfully.")
+
+    return model
 
 
 # ─────────────────────────────────────────────
@@ -109,6 +114,13 @@ def prepare_data_for_prediction(features, window_size=5):
 # Routes
 # ─────────────────────────────────────────────
 
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({
+        "status": "running",
+        "service": "Veritas Audio API"
+    })
+
 @app.route("/health", methods=["GET"])
 def health():
     """Health check endpoint."""
@@ -149,7 +161,7 @@ def predict_audio():
         print(f"🔢 Input shape for model: {input_data.shape}")
 
         # 5. Run LSTM prediction
-        prediction_raw = model.predict(input_data)
+        prediction_raw = get_model().predict(input_data)
         confidence_score = float(prediction_raw[0][0])
         prediction_label = "Real" if confidence_score > 0.5 else "Deepfake"
 
